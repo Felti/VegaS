@@ -113,7 +113,7 @@
 							<goal>repackage</goal>
 						</goals>
 						<configuration>
-							<mainClass>com.vega.app..AppApplication</mainClass>
+							<mainClass>com.vega.app.AppApplication</mainClass>
 							<finalName>vega</finalName>
 							<outputDirectory>${project.basedir}/docker</outputDirectory>
 						</configuration>
