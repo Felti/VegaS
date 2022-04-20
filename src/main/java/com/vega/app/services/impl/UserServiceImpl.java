@@ -16,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.vega.app.Exceptions.ObjectAlreadyExists;
-import com.vega.app.Exceptions.ValueIsNotUnique;
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.JwtRequest;
 import com.vega.app.dtos.JwtResponse;
@@ -27,6 +25,8 @@ import com.vega.app.dtos.UserDTO;
 import com.vega.app.entities.Role;
 import com.vega.app.entities.User;
 import com.vega.app.enums.RoleEnums;
+import com.vega.app.exceptions.ObjectAlreadyExists;
+import com.vega.app.exceptions.ValueIsNotUnique;
 import com.vega.app.repositories.UserRepository;
 import com.vega.app.services.PrivilegeService;
 import com.vega.app.services.RoleService;
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO signUp(SimpleUserDTO simpleUserDTO) throws ValueIsNotUnique {
+	public UserDTO signUp(SimpleUserDTO simpleUserDTO)  {
 		Assert.notNull(simpleUserDTO.getEmail(), ErrorMessages.MISSING_EMAIL);
 		Assert.notNull(simpleUserDTO.getLogin(), ErrorMessages.MISSING_LOGIN);
 		Assert.notNull(simpleUserDTO.getPassword(), ErrorMessages.MISSING_PASSWORD);
@@ -89,33 +89,33 @@ public class UserServiceImpl implements UserService {
 
 		var user = new User();
 
-		// set basic user info
-		if (Boolean.TRUE.equals(isLoginAlreadyExist(simpleUserDTO.getLogin())))
-			throw new ValueIsNotUnique(simpleUserDTO.getLogin());
+			// set basic user info
+			if (Boolean.TRUE.equals(isLoginAlreadyExist(simpleUserDTO.getLogin())))
+				throw new ValueIsNotUnique(simpleUserDTO.getLogin());
 
-		if (Boolean.TRUE.equals(isEmailAlreadyExist(simpleUserDTO.getEmail())))
-			throw new ValueIsNotUnique(simpleUserDTO.getEmail());
+			if (Boolean.TRUE.equals(isEmailAlreadyExist(simpleUserDTO.getEmail())))
+				throw new ValueIsNotUnique(simpleUserDTO.getEmail());
 
-		user.setEmail(simpleUserDTO.getEmail().trim());
-		user.setLogin(simpleUserDTO.getLogin().trim());
+			user.setEmail(simpleUserDTO.getEmail().trim());
+			user.setLogin(simpleUserDTO.getLogin().trim());
 
-		user.setPassword(SecurityUtils.encodePassword(simpleUserDTO.getPassword()));
-		user.setFirstName(simpleUserDTO.getFirstName().trim());
-		user.setLastName(simpleUserDTO.getLastName().trim());
-		user.setIsEnabled(true);
+			user.setPassword(SecurityUtils.encodePassword(simpleUserDTO.getPassword()));
+			user.setFirstName(simpleUserDTO.getFirstName().trim());
+			user.setLastName(simpleUserDTO.getLastName().trim());
+			user.setIsEnabled(true);
 
-		// Set roles and privileges
-		Set<Role> roles = new HashSet<>();
+			// Set roles and privileges
+			Set<Role> roles = new HashSet<>();
 
-		var role = roleService.mapSimpleDTOToEntity(roleService.getByNameAndDeleted(RoleEnums.ROLE_USER.toString(), false));
-		roles.add(role);
+			var role = roleService.mapSimpleDTOToEntity(roleService.getByNameAndDeleted(RoleEnums.ROLE_USER.toString(), false));
+			roles.add(role);
 
-		Set<PrivilegeDTO> privileges = privilegeService.getByRoleId(role.getId());
+			Set<PrivilegeDTO> privileges = privilegeService.getByRoleId(role.getId());
 
-		user.setRoles(roles);
-		user.setPrivileges(privileges.stream().map(p -> privilegeService.mapDTOToEntity(p)).collect(Collectors.toSet()));
+			user.setRoles(roles);
+			user.setPrivileges(privileges.stream().map(p -> privilegeService.mapDTOToEntity(p)).collect(Collectors.toSet()));
 
-		return mapEntityToDTO(userRepository.save(user));
+			return mapEntityToDTO(userRepository.save(user));
 	}
 
 	@Override

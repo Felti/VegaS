@@ -1,6 +1,6 @@
-package com.vega.app.Exceptions;
+package com.vega.app.exceptions;
 
-public class ObjectAlreadyExists  extends RuntimeException{
+public class ObjectAlreadyExists extends RuntimeException {
 
 	private static final long serialVersionUID = 388882136694879185L;
 

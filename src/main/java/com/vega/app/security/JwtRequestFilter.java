@@ -34,17 +34,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-		System.out.println("0");
-		
 		if (ObjectUtils.isEmpty(authHeader)) {
-			System.out.println("1");
 			chain.doFilter(request, response);
 			return;
 		}
 
-		System.out.println("2");
-		// Extract user name from JWT token
-		// final String token = authHeader.split(" ")[1].trim(); // in case bearer
 		final String login = jwtTokenUtil.getUsernameFromToken(authHeader);
 
 		// Once we get the token validate it.
@@ -56,8 +50,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			// authentication
 			if (Boolean.TRUE.equals(jwtTokenUtil.validateToken(authHeader, userDetails))) {
 
-				var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
+				var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+						userDetails.getAuthorities());
 				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				// After setting the Authentication in the context, we specify
 				// that the current user is authenticated. So it passes the

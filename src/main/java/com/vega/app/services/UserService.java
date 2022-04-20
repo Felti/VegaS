@@ -5,7 +5,6 @@ import java.util.Set;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 
-import com.vega.app.Exceptions.ValueIsNotUnique;
 import com.vega.app.dtos.JwtRequest;
 import com.vega.app.dtos.JwtResponse;
 import com.vega.app.dtos.SimpleUserDTO;
@@ -19,7 +18,7 @@ public interface UserService {
 
 	JwtResponse signIn(JwtRequest jwtRequest) throws BadCredentialsException, DisabledException;
 
-	UserDTO signUp(SimpleUserDTO simpleUserDTO) throws ValueIsNotUnique;
+	UserDTO signUp(SimpleUserDTO simpleUserDTO);
 
 	CustomUserDetails getCurrentUser();
 

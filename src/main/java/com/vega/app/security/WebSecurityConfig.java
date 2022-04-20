@@ -3,7 +3,6 @@ package com.vega.app.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -51,26 +50,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
+
 		// Enable CORS and disable CSRF
-		httpSecurity = httpSecurity.cors().and().csrf().disable();
+		httpSecurity.cors().and().csrf().disable();
 
 		// Set permissions on end-points
 		httpSecurity.authorizeRequests()
-				
-				// Public end-points
+
+				.antMatchers("/api/auth/sign-in").permitAll()
 				.antMatchers("/api/auth/sign-up").permitAll()
 				.antMatchers("/api/auth/save").permitAll()
 
-				.antMatchers("/login").permitAll()
-				
-				// Change password
 				.anyRequest().authenticated();
 
 		// Set unauthorized requests exception handler
-		httpSecurity = httpSecurity.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and();
+		httpSecurity.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and();
 
 		// Set session management to state-less
-		httpSecurity = httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+		httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
 		// Add JWT token filter
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

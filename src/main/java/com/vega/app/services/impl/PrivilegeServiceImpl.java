@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.vega.app.Exceptions.ObjectAlreadyExists;
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.PrivilegeDTO;
 import com.vega.app.entities.Privilege;
+import com.vega.app.exceptions.ObjectAlreadyExists;
 import com.vega.app.repositories.PrivilegeRepository;
 import com.vega.app.services.PrivilegeService;
 

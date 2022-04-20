@@ -1,4 +1,4 @@
-package com.vega.app.Exceptions;
+package com.vega.app.exceptions;
 
 public class ValueIsNotUnique extends RuntimeException {
 
@@ -6,16 +6,16 @@ public class ValueIsNotUnique extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = -5298355015536307220L;
-	private String Message;
+	private final String message;
 
 	public ValueIsNotUnique(String value) {
 		super();
-		Message = value + " already exists, please provide another value";
+		message = value + " already exists, please provide another value";
 	}
 
 	@Override
 	public String getMessage() {
-		return Message;
+		return message;
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.vega.app.entities;
 
-import java.util.Set;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,11 +17,13 @@ import lombok.ToString;
 @ToString
 @Table(name = "authuser")
 @AttributeOverride(name = "id", column = @Column(name = "id"))
-public class AuthUser extends Auditable{
-	
+public class AuthUser extends Auditable {
+
+	private static final long serialVersionUID = 1796122512306351925L;
+
 	@Column(name = "externalId")
 	private Long externalId;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
 
@@ -38,8 +38,5 @@ public class AuthUser extends Auditable{
 
 	@Column(name = "password")
 	private String password;
-
-
-	
 
 }
