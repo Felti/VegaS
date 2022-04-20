@@ -57,9 +57,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Set permissions on end-points
 		httpSecurity.authorizeRequests()
 
+				// Open end-points
 				.antMatchers("/api/auth/sign-in").permitAll()
 				.antMatchers("/api/auth/sign-up").permitAll()
-				.antMatchers("/api/auth/save").permitAll()
+				
+				// Allow Swagger end-points
+				.antMatchers("/swagger-ui/**").permitAll()
+				.antMatchers("/v3/api-docs/**").permitAll()
 
 				.anyRequest().authenticated();
 
