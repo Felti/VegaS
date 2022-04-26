@@ -1,6 +1,5 @@
 package com.vega.app.entities;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -18,7 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-
 @Table(name = "vega_category")
 @AttributeOverride(name = "id", column = @Column(name = "id"))
 public class Category extends Auditable {
@@ -27,12 +25,14 @@ public class Category extends Auditable {
 
 	private String name;
 
+	// multiple tags depend on one category
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-	private Set<Post> posts;
+	private Set<Tag> tags;
+	
+	//multiple tags depend on one category
+	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+	private Set<Size> sizes;
 
-	public Category() {
-		super();
-		posts = new HashSet<>();
-	}
+
 
 }

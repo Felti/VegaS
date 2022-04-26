@@ -6,13 +6,13 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vega.app.dtos.SimpleUserDTO;
 import com.vega.app.dtos.UserDTO;
+import com.vega.app.dtos.simple.SimpleUserDTO;
 
 public class CustomUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 3866274223316939121L;
-	
+
 	private final transient SimpleUserDTO user;
 	private final Collection<? extends GrantedAuthority> grantedAuthorities;
 

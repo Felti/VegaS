@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.PrivilegeDTO;
 import com.vega.app.dtos.RoleDTO;
-import com.vega.app.dtos.SimpleRoleDTO;
+import com.vega.app.dtos.simple.SimpleRoleDTO;
 import com.vega.app.entities.Privilege;
 import com.vega.app.entities.Role;
 import com.vega.app.exceptions.ObjectAlreadyExists;
@@ -82,6 +82,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Set<RoleDTO> getByUserId(Long userId) {
+		System.out.println("called getByUserId");
 		Assert.notNull(userId, ErrorMessages.ID_NOT_FOUND);
 		return roleRepository.getRolesByUserId(userId);
 	}

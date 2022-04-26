@@ -1,6 +1,5 @@
 package com.vega.app.entities;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -10,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -18,7 +18,6 @@ import com.vega.app.entities.ext.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -40,8 +39,14 @@ public class User extends Auditable {
 	@Column(name = "last_name")
 	private String lastName;
 
-	@Column(name = "legend")
-	private String legend;
+	// A user can have one city
+	@ManyToOne
+	@JoinColumn(name = "city_id")
+	private City city;
+
+	// A user can have multiple adresses
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	private Set<Adress> adresses;
 
 	@Column(name = "email", unique = true)
 	private String email;
@@ -61,34 +66,22 @@ public class User extends Auditable {
 	@Column(name = "is_enabled")
 	private Boolean isEnabled;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Post> posts;
+	// A user can aquire multipile stocks - providers
+	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
+	private Set<Stock> stocks;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Comment> comments;
+	// A user can aquire multipile products - clients
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+	private Set<Product> products;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	private Set<Reaction> reactions;
-
-	@ManyToMany
-	@JoinTable(name = "mtm_users_friends", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
-	private Set<User> friends = new HashSet<>();
-
+	// Many users can have many roles and vice versa
 	@ManyToMany
 	@JoinTable(name = "mtm_users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
 
+	// Many users can have many privileges and vice versa
 	@ManyToMany
 	@JoinTable(name = "mtm_users_privileges", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
 	private Set<Privilege> privileges;
-
-	public void befriendUser(@NonNull User user) {
-		friends.add(user);
-		user.getFriends().add(this);
-	}
-
-	public void removeFriend(@NonNull User user) {
-		friends.remove(user);
-	}
 
 }

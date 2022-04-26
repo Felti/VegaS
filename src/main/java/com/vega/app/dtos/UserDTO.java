@@ -2,6 +2,8 @@ package com.vega.app.dtos;
 
 import java.util.Set;
 
+import com.vega.app.dtos.simple.SimpleUserDTO;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

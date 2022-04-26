@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.CategoryDTO;
-import com.vega.app.dtos.SimpleCategoryDTO;
+import com.vega.app.dtos.simple.SimpleCategoryDTO;
 import com.vega.app.entities.Category;
 import com.vega.app.repositories.CategoryRepository;
 import com.vega.app.services.CategoryService;

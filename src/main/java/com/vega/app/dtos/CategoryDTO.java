@@ -1,7 +1,9 @@
 package com.vega.app.dtos;
 
-import java.time.LocalDateTime;
 import java.util.Set;
+
+import com.vega.app.dtos.simple.SimpleCategoryDTO;
+import com.vega.app.dtos.simple.SimpleTagDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,22 +14,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class CategoryDTO extends BaseDTO {
+public class CategoryDTO extends SimpleCategoryDTO {
 
-	private String name;
-
-	private Set<PostDTO> posts;
+	private Set<SimpleTagDTO> tags;
 
 	public CategoryDTO(Long id, String name) {
-		super(id);
-		this.name = name;
-	}
-
-	public CategoryDTO(Long id, Boolean deleted, LocalDateTime createdAt, LocalDateTime modifiedAt, String name,
-			Set<PostDTO> posts) {
-		super(id, deleted, createdAt, modifiedAt);
-		this.name = name;
-		this.posts = posts;
+		super(id, name);
 	}
 
 }

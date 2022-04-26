@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vega.app.dtos.RoleDTO;
-import com.vega.app.dtos.SimpleRoleDTO;
+import com.vega.app.dtos.simple.SimpleRoleDTO;
 import com.vega.app.entities.CustomResponse;
 import com.vega.app.services.RoleService;
 

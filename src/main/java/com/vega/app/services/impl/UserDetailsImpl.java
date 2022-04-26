@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.vega.app.dtos.PrivilegeDTO;
 import com.vega.app.dtos.RoleDTO;
-import com.vega.app.dtos.SimpleUserDTO;
+import com.vega.app.dtos.simple.SimpleUserDTO;
 import com.vega.app.services.PrivilegeService;
 import com.vega.app.services.RoleService;
 import com.vega.app.services.UserService;

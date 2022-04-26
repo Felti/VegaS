@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vega.app.dtos.JwtRequest;
 import com.vega.app.dtos.JwtResponse;
-import com.vega.app.dtos.SimpleUserDTO;
+
 import com.vega.app.dtos.UserDTO;
+import com.vega.app.dtos.simple.SimpleUserDTO;
 import com.vega.app.entities.CustomResponse;
 import com.vega.app.services.UserService;
 import com.vega.app.services.impl.CustomUserDetails;
@@ -29,9 +30,9 @@ public class AuthenticationController {
 
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<CustomResponse<JwtResponse>> createAuthenticationToken(@RequestBody JwtRequest credentials)
+	public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest credentials)
 			throws DisabledException, BadCredentialsException {
-		return new ResponseEntity<>(new CustomResponse<>(userService.signIn(credentials), "Authentication successful"),
+		return new ResponseEntity<>(userService.signIn(credentials),
 				HttpStatus.OK);
 	}
 

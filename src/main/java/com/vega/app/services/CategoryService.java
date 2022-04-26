@@ -3,7 +3,7 @@ package com.vega.app.services;
 import java.util.Set;
 
 import com.vega.app.dtos.CategoryDTO;
-import com.vega.app.dtos.SimpleCategoryDTO;
+import com.vega.app.dtos.simple.SimpleCategoryDTO;
 import com.vega.app.entities.Category;
 
 public interface CategoryService {
