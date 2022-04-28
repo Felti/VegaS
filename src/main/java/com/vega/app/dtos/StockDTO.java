@@ -3,6 +3,7 @@ package com.vega.app.dtos;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.vega.app.dtos.simple.SimpleFeatureDTO;
 import com.vega.app.dtos.simple.SimpleInvoiceDTO;
 import com.vega.app.dtos.simple.SimpleProductDTO;
 import com.vega.app.dtos.simple.SimpleStockDTO;
@@ -38,7 +39,7 @@ public class StockDTO extends SimpleStockDTO {
 
 	private Set<SimpleProductDTO> products = new HashSet<>();
 	
-	private Set<SizeDTO> sizes = new HashSet<>();
+	private Set<SimpleFeatureDTO> features = new HashSet<>();
 
 	private Set<SimpleTagDTO> tags = new HashSet<>();
 

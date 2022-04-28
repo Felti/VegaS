@@ -1,8 +1,7 @@
 package com.vega.app.dtos;
 
-
+import com.vega.app.dtos.simple.SimpleFeatureDTO;
 import com.vega.app.dtos.simple.SimpleStockDTO;
-
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-
-public class SizeDTO extends BaseDTO {
-
-	private String name;
-
-	private String displayName;
-	
-	private Integer nbrAvailable;
+public class FeatureDTO extends SimpleFeatureDTO {
 
 	private SimpleStockDTO stock;
 

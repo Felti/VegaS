@@ -53,14 +53,24 @@ public class Stock extends Auditable {
 	// One stock can have many products
 	@OneToMany(mappedBy = "stock")
 	private Set<Product> produits;
-	
+
 	// One stock can have many products
 	@OneToMany(mappedBy = "stock")
-	private Set<Size> sizes;
+	private Set<Feature> features;
 
 	// Many stocks can have many tags
 	@ManyToMany
 	@JoinTable(name = "mtm_stock_tag", joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "stock_id", referencedColumnName = "id"))
 	private Set<Tag> tags = new HashSet<>();
+
+	public void addTag(Tag tag) {
+		tags.add(tag);
+		tag.getStocks().add(this);
+	}
+
+	public void addFeature(Feature feature) {
+		features.add(feature);
+
+	}
 
 }

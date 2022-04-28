@@ -1,7 +1,6 @@
 package com.vega.app.services.impl;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.PageableDTO;
-import com.vega.app.dtos.SizeDTO;
 import com.vega.app.dtos.StockDTO;
 import com.vega.app.dtos.simple.SimpleTagDTO;
 import com.vega.app.entities.Stock;
@@ -27,6 +25,9 @@ import com.vega.app.repositories.StockRepository;
 import com.vega.app.services.StockService;
 import com.vega.app.services.TagService;
 import com.vega.app.services.UserService;
+import com.vega.app.services.CategoryService;
+import com.vega.app.services.ColorService;
+import com.vega.app.services.FeatureService;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -39,6 +40,15 @@ public class StockServiceImpl implements StockService {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	FeatureService featureService;
+
+	@Autowired
+	CategoryService categoryService;
+
+	@Autowired
+	ColorService colorService;
 
 	@Autowired
 	private ModelMapper mapper;
@@ -97,6 +107,8 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	public StockDTO create(StockDTO stockDTO) {
+		System.out.println("entred mthod");
+
 		Assert.notNull(stockDTO, ErrorMessages.OBJECT_NOT_FOUND);
 		Assert.notNull(stockDTO.getProvider(), ErrorMessages.OBJECT_NOT_FOUND);
 		Assert.notNull(stockDTO.getQuantity(), ErrorMessages.MISSING_QUANTITY);
@@ -105,15 +117,6 @@ public class StockServiceImpl implements StockService {
 		Assert.notNull(stockDTO.getSellingPrice(), ErrorMessages.MISSING_SELLING_PRICE);
 
 		var stock = new Stock();
-		
-		// set total elements
-		int totalElements = 0;
-		for (SizeDTO s : stockDTO.getSizes()) {
-			if (s.getNbrAvailable() != null) {
-				totalElements += s.getNbrAvailable();
-			}
-		
-		}
 
 		// Set basic info
 		if (!StringUtils.isBlank(stockDTO.getName())) {
@@ -121,16 +124,30 @@ public class StockServiceImpl implements StockService {
 		}
 
 		stock.setDescription(stockDTO.getDescription().trim());
-		stock.setQuantity(totalElements);
+
 		stock.setUnitPrice(stockDTO.getUnitPrice());
 		stock.setSellingPrice(stockDTO.getSellingPrice());
-		stock.setTotal(stockDTO.getUnitPrice() * stockDTO.getQuantity());
+
 		stock.setProvider(userService.mapSimpleDTOToEntity(stockDTO.getProvider()));
 
+		// Set tags
 		if (!stockDTO.getTags().isEmpty()) {
 			stock.setTags(
 					stockDTO.getTags().parallelStream().map(t -> tagService.mapSimpleDTOToEntity(t)).collect(Collectors.toSet()));
 		}
+
+		save(stock);
+
+		// set features + set total elements
+		if (!CollectionUtils.isEmpty(stockDTO.getFeatures())) {
+
+			stock.setQuantity(featureService.addFeaturesToStock(stockDTO.getFeatures(), stock));
+
+			stock.setFeatures(featureService.getByStockId(stock.getId()).parallelStream()
+					.map(f -> featureService.mapSimpleDTOToEntity(f)).collect(Collectors.toSet()));
+		}
+
+		stock.setTotal(stockDTO.getUnitPrice() * (stock.getQuantity() != null ? stock.getQuantity() : 1));
 
 		return saveToDTO(stock);
 	}

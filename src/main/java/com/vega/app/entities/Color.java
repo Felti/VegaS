@@ -1,33 +1,34 @@
 package com.vega.app.entities;
 
-import java.util.Set;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.vega.app.entities.ext.Auditable;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "vega_category")
+@ToString
+@Table(name = "vega_color")
 @AttributeOverride(name = "id", column = @Column(name = "id"))
-public class Category extends Auditable {
+public class Color extends Auditable {
 
-	private static final long serialVersionUID = 6813321775057173788L;
+	private static final long serialVersionUID = 5311804321437370246L;
 
 	private String name;
 
-	// multiple tags depend on one category
-	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-	private Set<Tag> tags;
+	private Integer available;
 
+	@ManyToOne
+	@JoinColumn(name = "feature_id")
+	private Feature feature;
 
 }

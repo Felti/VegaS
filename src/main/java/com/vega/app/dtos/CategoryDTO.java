@@ -17,6 +17,8 @@ import lombok.ToString;
 public class CategoryDTO extends SimpleCategoryDTO {
 
 	private Set<SimpleTagDTO> tags;
+	
+	private Set<FeatureDTO> features;
 
 	public CategoryDTO(Long id, String name) {
 		super(id, name);

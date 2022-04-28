@@ -4,7 +4,7 @@ public class ErrorMessages {
 	
 	public static final String PAGE_NUMBER_MISSING = "Page number cannot be empty";
 
-	public static final String PAGE_SIZE_MISSING = "Page Size cannot be empty";
+	public static final String PAGE_SIZE_MISSING = "Page Feature cannot be empty";
 
 	public static final String OBJECT_NOT_FOUND = " object not found";
 
