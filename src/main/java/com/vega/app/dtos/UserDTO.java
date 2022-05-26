@@ -19,6 +19,10 @@ public class UserDTO extends SimpleUserDTO {
 
 	private Set<PrivilegeDTO> privileges;
 
-	private Set<UserDTO> friends;
+	public UserDTO(Long id, String firstName, String lastName, String phoneNumber, String email) {
+		super(id, firstName, lastName, phoneNumber, email);
+	}
+	
+	
 
 }

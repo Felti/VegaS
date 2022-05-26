@@ -9,9 +9,13 @@ import com.vega.app.entities.Feature;
 
 public interface ColorService {
 
-	Set<SimpleColorDTO> getByFeatureId(Long id);
+	Set<SimpleColorDTO> getColorsOfFeature(Long id);
 
 	int addColorsToFeature(Set<SimpleColorDTO> colors, Feature feature);
+	
+	ColorDTO getDTOById(Long colorId);
+	
+	SimpleColorDTO getSimpleDTOById(Long colorId);
 
 	void save(Color color);
 
@@ -22,5 +26,7 @@ public interface ColorService {
 	SimpleColorDTO mapEntityToSimpleDTO(Color color);
 
 	Color mapSimpleDTOToEntity(SimpleColorDTO colorDTO);
+
+	void removeUnitSold(Long colorId);
 
 }

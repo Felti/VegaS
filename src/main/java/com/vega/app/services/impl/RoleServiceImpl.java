@@ -82,7 +82,6 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Set<RoleDTO> getByUserId(Long userId) {
-		System.out.println("called getByUserId");
 		Assert.notNull(userId, ErrorMessages.ID_NOT_FOUND);
 		return roleRepository.getRolesByUserId(userId);
 	}

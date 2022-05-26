@@ -27,7 +27,11 @@ public class Product extends Auditable {
 
 	private String name;
 
-	private Double sellingPrice;
+	private String size;
+
+	private String color;
+
+	private Double price;
 
 	@ManyToOne
 	@JoinColumn(name = "order_id")

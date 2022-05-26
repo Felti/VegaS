@@ -5,14 +5,17 @@ import java.util.Set;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.ColorDTO;
 import com.vega.app.dtos.simple.SimpleColorDTO;
 import com.vega.app.entities.Color;
 import com.vega.app.entities.Feature;
-import com.vega.app.restcontrollers.ColorRepository;
+import com.vega.app.repositories.ColorRepository;
 import com.vega.app.services.ColorService;
+import com.vega.app.services.FeatureService;
 
 @Service
 public class ColorServiceImpl implements ColorService {
@@ -21,11 +24,14 @@ public class ColorServiceImpl implements ColorService {
 	private ColorRepository colorRepository;
 
 	@Autowired
+	private FeatureService featureService;
+
+	@Autowired
 	private ModelMapper mapper;
 
 	@Override
-	public Set<SimpleColorDTO> getByFeatureId(Long id) {
-		return colorRepository.findByStockId(id);
+	public Set<SimpleColorDTO> getColorsOfFeature(Long id) {
+		return colorRepository.findByColorsOfFeature(id);
 	}
 
 	@Override
@@ -45,6 +51,31 @@ public class ColorServiceImpl implements ColorService {
 			}
 		}
 		return totalElements;
+	}
+
+	@Override
+	public void removeUnitSold(Long colorId) {
+		Assert.notNull(colorId, "removeUnitSolde : colorId cannot be null");
+
+		// update color nbr unites
+		ColorDTO color = getDTOById(colorId);
+		if (color != null) {
+
+			color.setAvailable(color.getAvailable() - 1);
+			colorRepository.save(mapDTOToEntity(color));
+
+			// update total features
+			featureService.updateFeatureNbrAvailable(color.getFeature().getId());
+		} else {
+			throw new NullPointerException("removeUnitSolde : Couldn't find color");
+		}
+
+	}
+
+	@Override
+	public ColorDTO getDTOById(Long id) {
+		Assert.notNull(id, ErrorMessages.ID_NOT_FOUND);
+		return colorRepository.findDTOById(id);
 	}
 
 	@Override
@@ -70,6 +101,11 @@ public class ColorServiceImpl implements ColorService {
 	@Override
 	public Color mapSimpleDTOToEntity(SimpleColorDTO colorDTO) {
 		return mapper.map(colorDTO, Color.class);
+	}
+
+	@Override
+	public SimpleColorDTO getSimpleDTOById(Long colorId) {
+		return colorRepository.findSimpleDTOById(colorId);
 	}
 
 }

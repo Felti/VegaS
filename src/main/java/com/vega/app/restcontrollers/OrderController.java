@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vega.app.dtos.OrderDTO;
 import com.vega.app.dtos.PageableDTO;
 import com.vega.app.entities.CustomResponse;
+import com.vega.app.entities.request.PageRequest;
 import com.vega.app.services.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,8 +29,8 @@ public class OrderController {
 
 	@Operation(summary = "Used to get all orders", description = "Takes as RequestBody a PageDTO object")
 	@PostMapping("/all")
-	public ResponseEntity<CustomResponse<Page<OrderDTO>>> all(@RequestBody PageableDTO pageDTO) {
-		return new ResponseEntity<>(new CustomResponse<>(orderService.getAll(pageDTO), "got all the orders :')"),
+	public ResponseEntity<CustomResponse<Page<OrderDTO>>> all(@RequestBody PageRequest request) {
+		return new ResponseEntity<>(new CustomResponse<>(orderService.getAll(request.getPageRequest(), request.getDeleted()), "got all the orders :')"),
 				HttpStatus.OK);
 	}
 

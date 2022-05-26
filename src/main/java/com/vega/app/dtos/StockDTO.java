@@ -1,5 +1,6 @@
 package com.vega.app.dtos;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class StockDTO extends SimpleStockDTO {
 
 	private String description;
 
+	private Integer initialQuantity;
+
 	private Integer quantity;
 
 	private Double unitPrice;
@@ -38,16 +41,18 @@ public class StockDTO extends SimpleStockDTO {
 	private Set<SimpleInvoiceDTO> invoices = new HashSet<>();
 
 	private Set<SimpleProductDTO> products = new HashSet<>();
-	
+
 	private Set<SimpleFeatureDTO> features = new HashSet<>();
 
 	private Set<SimpleTagDTO> tags = new HashSet<>();
 
-	public StockDTO(Long id, String name, String description, Integer quantity, Double unitPrice, Double sellingPrice,
-			Double total, Long providerId, String providerFirstName, String providerLastName) {
-		super(id);
+	public StockDTO(Long id, Boolean deleted, Date createdAt, Date modifiedAt, String name, String description,
+			Integer initialQuantity, Integer quantity, Double unitPrice, Double sellingPrice, Double total, Long providerId,
+			String providerFirstName, String providerLastName) {
+		super(id, deleted, createdAt, modifiedAt);
 		this.name = name;
 		this.description = description;
+		this.initialQuantity = initialQuantity;
 		this.quantity = quantity;
 		this.unitPrice = unitPrice;
 		this.sellingPrice = sellingPrice;

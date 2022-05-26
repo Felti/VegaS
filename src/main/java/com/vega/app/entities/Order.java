@@ -32,25 +32,23 @@ public class Order extends Auditable {
 	private static final long serialVersionUID = 7872981209180175489L;
 
 	private String reference;
-	
+
 	private Boolean isCancelled;
-	
+
+	private Boolean isPaid;
+
+	private Boolean isShipped;
+
+	private Double totalAmount;
+
 	@OneToOne
 	private Invoice invoice;
 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private User customer;
-	
-	@ManyToOne
-	@JoinColumn(name = "status_id")
-	private OrderStatus status;
 
 	@OneToMany(mappedBy = "order")
 	private Set<Product> products;
-
-
-
-
 
 }

@@ -1,5 +1,7 @@
 package com.vega.app.restcontrollers;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vega.app.dtos.UserDTO;
+import com.vega.app.dtos.simple.SimpleUserDTO;
 import com.vega.app.entities.CustomResponse;
 import com.vega.app.services.UserService;
 
@@ -28,6 +31,11 @@ public class UserController {
 	@GetMapping("{id}")
 	public ResponseEntity<CustomResponse<UserDTO>> getByid(@PathVariable(name = "id") Long id) {
 		return new ResponseEntity<>(new CustomResponse<>(userService.getDTOById(id)), HttpStatus.OK);
+	}
+	
+	@GetMapping("/providers")
+	public ResponseEntity<CustomResponse<Set<SimpleUserDTO>>> getProviders() {
+		return new ResponseEntity<>(new CustomResponse<>(userService.getProviders()), HttpStatus.OK);
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.vega.app.dtos;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +17,9 @@ public class BaseDTO {
 
 	private Boolean deleted;
 
-	private LocalDateTime createdAt;
+	private Date createdAt;
 
-	private LocalDateTime modifiedAt;
+	private Date modifiedAt;
 
 	public BaseDTO(Long id) {
 		super();
@@ -33,27 +33,27 @@ public class BaseDTO {
 
 	}
 
-	public BaseDTO(Long id, LocalDateTime createdAt) {
+	public BaseDTO(Long id, Date createdAt) {
 		super();
 		this.id = id;
 		this.createdAt = createdAt;
 	}
 
-	public BaseDTO(Long id, Boolean deleted, LocalDateTime createdAt) {
+	public BaseDTO(Long id, Boolean deleted, Date createdAt) {
 		super();
 		this.id = id;
 		this.deleted = deleted;
 		this.createdAt = createdAt;
 	}
 
-	public BaseDTO(Long id, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+	public BaseDTO(Long id, Date createdAt, Date modifiedAt) {
 		super();
 		this.id = id;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 	}
 
-	public BaseDTO(Long id, Boolean deleted, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+	public BaseDTO(Long id, Boolean deleted, Date createdAt, Date modifiedAt) {
 		super();
 		this.id = id;
 		this.deleted = deleted;

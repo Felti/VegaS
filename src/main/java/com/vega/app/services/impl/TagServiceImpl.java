@@ -30,6 +30,11 @@ public class TagServiceImpl implements TagService {
 	CategoryService categoryService;
 
 	@Override
+	public Set<SimpleTagDTO> getAll() {
+		return tagRepository.findAllAndDeletedFalse();
+	}
+
+	@Override
 	public TagDTO create(TagDTO dto) {
 		Assert.notNull(dto, ErrorMessages.OBJECT_NOT_FOUND);
 
@@ -58,13 +63,13 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	public TagDTO mapEntityToDTO(Tag tag) {
-		return mapper.map(tag, TagDTO.class);
+	public Tag save(Tag tag) {
+		return tagRepository.save(tag);
 	}
 
 	@Override
-	public Tag save(Tag tag) {
-		return tagRepository.save(tag);
+	public TagDTO mapEntityToDTO(Tag tag) {
+		return mapper.map(tag, TagDTO.class);
 	}
 
 	@Override

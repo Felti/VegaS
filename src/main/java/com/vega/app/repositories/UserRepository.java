@@ -1,6 +1,7 @@
 package com.vega.app.repositories;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,9 @@ import com.vega.app.dtos.simple.SimpleUserDTO;
 import com.vega.app.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+	
+	@Query("SELECT new com.vega.app.dtos.simple.SimpleUserDTO(id, firstName, lastName) FROM User u WHERE u.deleted = false")
+	Set<SimpleUserDTO> findProvidersAndDeletedFalse();
 
 	@Query("SELECT new com.vega.app.dtos.simple.SimpleUserDTO(id, firstName, lastName, login, password, isEnabled) FROM User u WHERE u.deleted = false AND u.login = ?1")
 	SimpleUserDTO findByLogin(String login);

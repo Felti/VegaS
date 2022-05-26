@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class StockRequest {
+public class PageRequest {
 	
 	private PageableDTO pageRequest;
 	

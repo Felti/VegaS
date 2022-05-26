@@ -32,6 +32,8 @@ public class Stock extends Auditable {
 	private String name;
 
 	private String description;
+	
+	private Integer initialQuantity;
 
 	private Integer quantity;
 

@@ -156,6 +156,11 @@ public class UserServiceImpl implements UserService {
 
 		return null;
 	}
+	
+	@Override
+	public Set<SimpleUserDTO> getProviders() {
+		return userRepository.findProvidersAndDeletedFalse();
+	}
 
 	@Override
 	public User getById(Long id) {
@@ -238,4 +243,6 @@ public class UserServiceImpl implements UserService {
 	private Boolean isEmailAlreadyExist(String email) {
 		return userRepository.countByEmail(email.trim().toLowerCase()) > 0;
 	}
+
+
 }

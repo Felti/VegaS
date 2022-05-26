@@ -18,5 +18,7 @@ public class TagDTO  extends SimpleTagDTO{
 	private SimpleCategoryDTO category;
 	
 	private Set<SimpleStockDTO> stocks;
+	
+	
 
 }

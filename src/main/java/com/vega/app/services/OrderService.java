@@ -4,13 +4,14 @@ import org.springframework.data.domain.Page;
 
 import com.vega.app.dtos.OrderDTO;
 import com.vega.app.dtos.PageableDTO;
+import com.vega.app.dtos.simple.SimpleOrderDTO;
 import com.vega.app.entities.Order;
 
 public interface OrderService {
 
 	Order getById(Long id);
 
-	Page<OrderDTO> getAll(PageableDTO pageDTO);
+	Page<OrderDTO> getAll(PageableDTO pageDTO, Boolean deleted);
 
 	OrderDTO getDTOById(Long id);
 
@@ -27,5 +28,11 @@ public interface OrderService {
 	OrderDTO mapEntityToDTO(Order product);
 
 	Order mapDTOToEntity(OrderDTO dto);
+
+	Order save(Order order);
+
+	SimpleOrderDTO mapEntityToSimpleDTO(Order order);
+
+	Order mapSimpleDTOToEntity(SimpleOrderDTO dto);
 
 }

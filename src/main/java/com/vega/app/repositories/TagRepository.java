@@ -14,5 +14,8 @@ public interface TagRepository extends JpaRepository<Tag, Long>{
 	
 	@Query("SELECT new com.vega.app.dtos.simple.SimpleTagDTO(t.id, t.name) FROM Tag t LEFT JOIN t.stocks s WHERE s.id = ?1")
 	Set<SimpleTagDTO> findTagsOfStock(Long stock); 
+	
+	@Query("SELECT new com.vega.app.dtos.simple.SimpleTagDTO(t.id, t.deleted, t.createdAt, t.modifiedAt, t.name) FROM Tag t WHERE t.deleted = false")
+	Set<SimpleTagDTO> findAllAndDeletedFalse(); 
 
 }

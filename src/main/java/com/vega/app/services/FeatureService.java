@@ -11,8 +11,12 @@ public interface FeatureService {
 
 	// adds features to category and return a the total size of stocks
 	int addFeaturesToStock(Set<SimpleFeatureDTO> features, Stock stock);
+
+	Set<SimpleFeatureDTO> getFeaturesOfStock(Long stockId);
+
+	void updateFeatureNbrAvailable(Long id);
 	
-	Set<SimpleFeatureDTO> getByStockId(Long stockId);
+	SimpleFeatureDTO getSimpleDTOById(Long id);
 
 	void save(Feature feature);
 
@@ -24,6 +28,8 @@ public interface FeatureService {
 
 	Feature mapSimpleDTOToEntity(SimpleFeatureDTO featureDTO);
 
+	FeatureDTO getDTOById(Long id);
+	
 
 
 }

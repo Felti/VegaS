@@ -22,5 +22,7 @@ public interface TagService {
 	SimpleTagDTO mapEntityToSimpleDTO(Tag tag);
 
 	Set<SimpleTagDTO> getTagsOfStock(Long StockId);
+	
+	Set<SimpleTagDTO> getAll();
 
 }

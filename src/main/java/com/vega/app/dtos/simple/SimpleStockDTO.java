@@ -1,5 +1,7 @@
 package com.vega.app.dtos.simple;
 
+import java.util.Date;
+
 import com.vega.app.dtos.BaseDTO;
 
 import lombok.Getter;
@@ -27,6 +29,15 @@ public class SimpleStockDTO extends BaseDTO {
 
 	public SimpleStockDTO(Long id) {
 		super(id);
+	}
+
+	public SimpleStockDTO(Long id, String name) {
+		super(id);
+		this.name = name;
+	}
+
+	public SimpleStockDTO(Long id, Boolean deleted, Date createdAt, Date modifiedAt) {
+		super(id, deleted, createdAt, modifiedAt);
 	}
 
 }

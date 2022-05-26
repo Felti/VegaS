@@ -39,6 +39,9 @@ public interface UserService {
 
 	// CRUD user
 	Set<UserDTO> getAll();
+	
+//CRUD user
+	Set<SimpleUserDTO> getProviders();
 
 	UserDTO create(UserDTO userDTO);
 

@@ -2,6 +2,7 @@ package com.vega.app.entities.ext;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -34,11 +35,11 @@ public class Auditable implements Serializable {
 
 	@CreatedDate
 	@Column(name = "created_at", updatable = false)
-	private LocalDateTime createdAt;
+	private Date createdAt;
 
 	@LastModifiedDate
 	@Column(name = "modified_at")
-	private LocalDateTime modifiedAt;
+	private Date modifiedAt;
 
 	@Column(name = "deleted")
 	private Boolean deleted;

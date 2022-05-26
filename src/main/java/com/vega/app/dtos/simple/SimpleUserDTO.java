@@ -41,6 +41,14 @@ public class SimpleUserDTO extends BaseDTO {
 		this.lastName = lastName;
 		this.pictureUrl = pictureUrl;
 	}
+	
+	public SimpleUserDTO(Long id, String firstName, String lastName, String phoneNumber, String email) {
+		super(id);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+	}
 
 	public SimpleUserDTO(Long id, String firstName, String lastName, String email, String phoneNumber, String login,
 			String password, Boolean isEnabled) {

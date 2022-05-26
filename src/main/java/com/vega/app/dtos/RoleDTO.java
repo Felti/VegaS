@@ -1,6 +1,6 @@
 package com.vega.app.dtos;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class RoleDTO extends BaseDTO {
 		this.name = name;
 	}
 
-	public RoleDTO(Long id, String name, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean deleted) {
+	public RoleDTO(Long id, String name, Date createdAt, Date modifiedAt, Boolean deleted) {
 		super(id, deleted, createdAt, modifiedAt);
 		this.name = name;
 		this.privileges = new HashSet<>();

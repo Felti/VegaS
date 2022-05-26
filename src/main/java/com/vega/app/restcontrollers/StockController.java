@@ -1,5 +1,7 @@
 package com.vega.app.restcontrollers;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vega.app.dtos.StockDTO;
 import com.vega.app.entities.CustomResponse;
-import com.vega.app.entities.request.StockRequest;
+import com.vega.app.entities.front.CostStats;
+import com.vega.app.entities.front.RevenuStats;
+import com.vega.app.entities.request.PageRequest;
 import com.vega.app.services.StockService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,17 +33,9 @@ public class StockController {
 
 	@Operation(summary = "Used to get paged list of Stocks", description = "Takes as RequestBody a PageDTO object")
 	@PostMapping("/all")
-	public ResponseEntity<CustomResponse<Page<StockDTO>>> getAll(@RequestBody StockRequest request) {
+	public ResponseEntity<CustomResponse<Page<StockDTO>>> getAll(@RequestBody PageRequest request) {
 		return new ResponseEntity<>(
 				new CustomResponse<>(stockService.getAll(request.getPageRequest(), request.getDeleted())), HttpStatus.OK);
-	}
-
-	@Operation(summary = "Used to Add more units into a stock", description = "Adds more unit and create a new invoice for the same provider/stock")
-	@GetMapping("/add")
-	public ResponseEntity<CustomResponse<Boolean>> add(@RequestParam(name = "id") Long id, @RequestParam(name = "quantity") Integer quantity) {
-		return new ResponseEntity<>(
-				new CustomResponse<>(stockService.addQuantity(id, quantity), "Added " + quantity + " Unit succesfully"),
-				HttpStatus.OK);
 	}
 
 	@Operation(summary = "Used to create an order", description = "")
@@ -68,6 +64,18 @@ public class StockController {
 	public ResponseEntity<CustomResponse<StockDTO>> undelete(@PathVariable Long id) {
 		return new ResponseEntity<>(new CustomResponse<>(stockService.undelete(id), "Your stock has been restored"),
 				HttpStatus.OK);
+	}
+
+	@GetMapping("stats/revenu")
+	public ResponseEntity<CustomResponse<RevenuStats>> stocksRevenuStats(@RequestParam(name = "start") Date start,
+			@RequestParam(name = "end") Date end) {
+		return new ResponseEntity<>(new CustomResponse<>(stockService.getStocksRevenuStats(start, end)), HttpStatus.OK);
+	}
+
+	@GetMapping("stats/costs")
+	public ResponseEntity<CustomResponse<CostStats>> stockCostsStats(@RequestParam(name = "start") Date start,
+			@RequestParam(name = "end") Date end) {
+		return new ResponseEntity<>(new CustomResponse<>(stockService.getStocksCostsStats(start, end)), HttpStatus.OK);
 	}
 
 }

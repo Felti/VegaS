@@ -1,5 +1,6 @@
 package com.vega.app.services.impl;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -19,15 +20,20 @@ import org.springframework.util.CollectionUtils;
 import com.vega.app.constants.ErrorMessages;
 import com.vega.app.dtos.PageableDTO;
 import com.vega.app.dtos.StockDTO;
+import com.vega.app.dtos.simple.SimpleFeatureDTO;
+import com.vega.app.dtos.simple.SimpleStockDTO;
 import com.vega.app.dtos.simple.SimpleTagDTO;
+import com.vega.app.entities.Feature;
 import com.vega.app.entities.Stock;
+import com.vega.app.entities.front.CostStats;
+import com.vega.app.entities.front.RevenuStats;
 import com.vega.app.repositories.StockRepository;
-import com.vega.app.services.StockService;
 import com.vega.app.services.TagService;
 import com.vega.app.services.UserService;
 import com.vega.app.services.CategoryService;
 import com.vega.app.services.ColorService;
 import com.vega.app.services.FeatureService;
+import com.vega.app.services.StockService;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -65,6 +71,10 @@ public class StockServiceImpl implements StockService {
 		Page<StockDTO> stocks = stockRepository.findAllByDeleted(deleted, pageRequest);
 		if (!CollectionUtils.isEmpty(stocks.getContent())) {
 			stocks.getContent().parallelStream().forEach(s -> s.setTags(appendTagsToStock(s.getId())));
+			stocks.getContent().parallelStream().forEach(s -> {
+				s.setFeatures(appendFeaturesToStock(s.getId()));
+
+			});
 
 		}
 
@@ -88,32 +98,17 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public Boolean addQuantity(Long id, Integer quantity) {
+	public SimpleStockDTO getSimpleDTOById(Long id) {
 		Assert.notNull(id, ErrorMessages.ID_NOT_FOUND);
-
-		var existingStock = getById(id);
-
-		Assert.notNull(existingStock, ErrorMessages.OBJECT_NOT_FOUND);
-
-		existingStock.setQuantity(existingStock.getQuantity() + quantity);
-		existingStock.setTotal(updateTotal(existingStock.getUnitPrice(), existingStock.getQuantity()));
-
-		save(existingStock);
-
-		// Create a new invoice after that
-
-		return true;
+		return stockRepository.findSimpleDTOById(id);
 	}
 
 	@Override
 	public StockDTO create(StockDTO stockDTO) {
-		System.out.println("entred mthod");
 
 		Assert.notNull(stockDTO, ErrorMessages.OBJECT_NOT_FOUND);
 		Assert.notNull(stockDTO.getProvider(), ErrorMessages.OBJECT_NOT_FOUND);
-		Assert.notNull(stockDTO.getQuantity(), ErrorMessages.MISSING_QUANTITY);
 		Assert.notNull(stockDTO.getUnitPrice(), ErrorMessages.MISSING_UNIT_PRICE);
-		Assert.notNull(stockDTO.getSellingPrice(), ErrorMessages.MISSING_SELLING_PRICE);
 		Assert.notNull(stockDTO.getSellingPrice(), ErrorMessages.MISSING_SELLING_PRICE);
 
 		var stock = new Stock();
@@ -123,7 +118,9 @@ public class StockServiceImpl implements StockService {
 			stock.setName(stockDTO.getName().trim());
 		}
 
-		stock.setDescription(stockDTO.getDescription().trim());
+		if (!StringUtils.isBlank(stockDTO.getDescription())) {
+			stock.setDescription(stockDTO.getDescription().trim());
+		}
 
 		stock.setUnitPrice(stockDTO.getUnitPrice());
 		stock.setSellingPrice(stockDTO.getSellingPrice());
@@ -141,9 +138,13 @@ public class StockServiceImpl implements StockService {
 		// set features + set total elements
 		if (!CollectionUtils.isEmpty(stockDTO.getFeatures())) {
 
+			// stock left
 			stock.setQuantity(featureService.addFeaturesToStock(stockDTO.getFeatures(), stock));
 
-			stock.setFeatures(featureService.getByStockId(stock.getId()).parallelStream()
+			// stock of start
+			stock.setInitialQuantity(stock.getQuantity() != null ? stock.getQuantity() : 0);
+
+			stock.setFeatures(featureService.getFeaturesOfStock(stock.getId()).parallelStream()
 					.map(f -> featureService.mapSimpleDTOToEntity(f)).collect(Collectors.toSet()));
 		}
 
@@ -214,18 +215,27 @@ public class StockServiceImpl implements StockService {
 	public Double updateTotal(Double unitPrice, Integer quantity) {
 		Assert.notNull(unitPrice, "unitPrice is null");
 		Assert.notNull(quantity, "quantity is null");
-
 		return unitPrice * quantity;
-	}
-
-	@Override
-	public Stock save(Stock stock) {
-		return stockRepository.save(stock);
 	}
 
 	public Set<SimpleTagDTO> appendTagsToStock(Long stockId) {
 		Assert.notNull(stockId, ErrorMessages.ID_NOT_FOUND);
 		return tagService.getTagsOfStock(stockId);
+	}
+
+	public Set<SimpleFeatureDTO> appendFeaturesToStock(Long stockId) {
+		Assert.notNull(stockId, ErrorMessages.ID_NOT_FOUND);
+		Set<SimpleFeatureDTO> features = featureService.getFeaturesOfStock(stockId);
+		if (!CollectionUtils.isEmpty(features)) {
+			features.parallelStream().forEach(f -> f.setColors(colorService.getColorsOfFeature(f.getId())));
+			return features;
+		}
+		return new HashSet<>();
+	}
+
+	@Override
+	public Stock save(Stock stock) {
+		return stockRepository.save(stock);
 	}
 
 	@Override
@@ -239,8 +249,37 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
+	public Stock mapSimpleDTOToEntity(SimpleStockDTO dto) {
+		return mapper.map(dto, Stock.class);
+	}
+
+	@Override
 	public StockDTO saveToDTO(Stock stock) {
 		return mapEntityToDTO(stockRepository.save(stock));
+	}
+
+	@Override
+	public void updateStockQuantity(Long id) {
+		Assert.notNull(id, ErrorMessages.ID_NOT_FOUND);
+		var stock = getById(id);
+		var totalAvailable = 0;
+		for (Feature f : stock.getFeatures()) {
+			totalAvailable += f.getNbrAvailable();
+		}
+		stock.setQuantity(totalAvailable);
+		save(stock);
+	}
+
+	@Override
+	public RevenuStats getStocksRevenuStats(Date start, Date end) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CostStats getStocksCostsStats(Date start, Date end) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
